@@ -4,6 +4,7 @@ import fs from "fs/promises";
 import path from "path";
 import os from "os";
 import base64Json from "@/public/base64.json";
+import { stripDataUrlPrefix } from "@/lib/base64";
 
 import { NextRequest, NextResponse } from "next/server";
 
@@ -29,7 +30,7 @@ export async function GET(): Promise<NextResponse> {
         }
 
         // Remove data URL prefix if present (e.g., "data:image/png;base64,")
-        const base64Data = image.replace(/^data:image\/\w+;base64,/, "");
+        const base64Data = stripDataUrlPrefix(image);
         const imageBuffer = Buffer.from(base64Data, "base64");
 
         // Write to temp file
