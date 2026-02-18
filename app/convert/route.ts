@@ -1,4 +1,3 @@
-import ffmpeg from "ffmpeg-static";
 import { spawn } from "child_process";
 import fs from "fs/promises";
 import path from "path";
@@ -6,7 +5,7 @@ import os from "os";
 import base64Json from "@/public/base64.json";
 import { stripDataUrlPrefix } from "@/lib/base64";
 
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 export async function GET(): Promise<NextResponse> {
     const overlayPath = path.join(
@@ -89,7 +88,7 @@ export async function GET(): Promise<NextResponse> {
                     if (!isClosed) {
                         try {
                             controller.enqueue(new Uint8Array(data));
-                        } catch (error) {
+                        } catch {
                             // Controller might be closed, ignore the error
                         }
                     }
@@ -108,7 +107,7 @@ export async function GET(): Promise<NextResponse> {
                                 if (controller.desiredSize !== null) {
                                     controller.close();
                                 }
-                            } catch (error) {
+                            } catch {
                                 // Controller already closed by client
                             }
                         } else {
@@ -118,7 +117,7 @@ export async function GET(): Promise<NextResponse> {
                                         new Error(`FFmpeg failed with code ${code}: ${stderr}`)
                                     );
                                 }
-                            } catch (error) {
+                            } catch {
                                 // Controller already closed by client
                             }
                         }
@@ -133,7 +132,7 @@ export async function GET(): Promise<NextResponse> {
                             if (controller.desiredSize !== null) {
                                 controller.error(error);
                             }
-                        } catch (error) {
+                        } catch {
                             // Controller already closed by client
                         }
                     }
